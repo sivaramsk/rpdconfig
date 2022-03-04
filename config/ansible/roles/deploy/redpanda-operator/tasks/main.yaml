@@ -1,0 +1,47 @@
+
+# From repository
+- name: Add stable chart repo
+  kubernetes.core.helm_repository:
+    name: redpanda
+    repo_url: "https://charts.vectorized.io/"
+
+- name: Get Latest version of Redpanda Operator
+  uri:
+    url: https://api.github.com/repos/redpanda-data/redpanda/releases/latest 
+    return_content: yes
+  register: redpanda_version
+
+- name: Print returned json dictionary
+  debug:
+    var: redpanda_version.json.tag_name
+
+    #- name: Download Redpanda cli add script
+    #get_url: 
+    #url: https://packages.vectorized.io/nzc4ZYQK3WRGd9sy/redpanda/cfg/setup/bash.deb.sh
+    #dest: /tmp/bash.deb.sh
+    #mode: 0755
+
+    #- name: Add Redpanda CLI to the system 
+    #become: true
+    #shell: /tmp/bash.deb.sh
+
+    #- name: Install Redpanda CLI (rpk)
+    #apt:
+    #name: redpanda
+    #update_cache: yes
+
+- name: Install Redpanda CRDs
+  kubernetes.core.k8s:
+    definition: '{{ lookup("kubernetes.core.kustomize", dir="https://github.com/redpanda-data/redpanda/src/go/k8s/config/crd?ref=v21.11.8") }}'
+    #definition: '{{ lookup("kubernetes.core.kustomize", dir="https://github.com/redpanda-data/redpanda/src/go/k8s/config/crd?ref={{ redpanda_version.json.tag_name }}") }}'
+
+- name: Deploy latest version of Redpanda Operator
+  kubernetes.core.helm:
+    name: redpanda-operator
+    chart_ref: redpanda/redpanda-operator
+    release_namespace: redpanda-system
+    create_namespace: true
+    chart_version: "v21.11.8"
+    #chart_version: "{{ redpanda_version.json.tag_name }}"
+    wait: true
+

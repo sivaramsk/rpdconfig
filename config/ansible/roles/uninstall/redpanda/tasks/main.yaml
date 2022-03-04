@@ -1,0 +1,6 @@
+- name: Remove redpanda-operator using helm
+  kubernetes.core.helm:
+    name: redpanda-operator
+    release_namespace: redpanda-system
+    state: absent
+    wait: true
