@@ -1,0 +1,46 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+
+    - name: Create panda-chat topic with five partitions
+      ansible.builtin.shell: ${GOPATH}/bin/rpk topic create panda-chat -p 5 --brokers localhost:30001
+    
+    - name: Produce some data in panda-chat topic
+      ansible.builtin.shell: |
+        global env
+        set timeout 20
+
+        spawn $env(GOPATH)/bin/rpk topic produce panda-chat --brokers localhost:30001
+
+        expect "" 
+        send "Pandas are fabulous\r"
+        expect "Produced to partition*"
+        send "Yep, and so are red pandas"
+        expect "Produced to partition*" 
+        send "\x04"
+
+        interact
+      args:
+        executable: /usr/bin/expect
+      delegate_to: localhost
+
+
+    - name: Consume the data produced in panda-chat topic
+      ansible.builtin.shell: |
+        gobal env
+        set timeout 20
+
+        spawn $env(GOPATH)/bin/rpk topic consume panda-chat --brokers localhost:30001
+        expect ""
+        send "\x03"
+
+        interact
+      args:
+        executable: /usr/bin/expect
+      delegate_to: localhost
+
+    - name: List the topics 
+      ansible.builtin.shell: ${GOPATH}/bin/rpk topic list --brokers localhost:30001
+

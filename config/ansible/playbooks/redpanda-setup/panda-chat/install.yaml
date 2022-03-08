@@ -1,0 +1,25 @@
+
+
+---
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+    - name: Create a k8s namespace
+      kubernetes.core.k8s:
+        name: panda-chat
+        api_version: v1
+        kind: Namespace
+        state: present
+
+    - name: Download one-node-external manifest file
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/redpanda-data/redpanda/dev/src/go/k8s/config/samples/one_node_external.yaml
+        dest: /tmp/one_node_external.yaml
+        mode: '0664'
+
+    - name: Apply one-node-external manifest to the cluster.
+      kubernetes.core.k8s:
+        state: present
+        src: /tmp/one_node_external.yaml
+        
