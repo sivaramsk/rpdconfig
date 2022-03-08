@@ -22,6 +22,7 @@
 
     - name: Apply one-node-external manifest to the cluster.
       kubernetes.core.k8s:
+        namespace: panda-chat
         state: present
         src: /tmp/one_node_external.yaml
         
