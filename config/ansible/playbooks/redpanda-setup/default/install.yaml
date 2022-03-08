@@ -26,6 +26,5 @@
         state: present
         src: /tmp/one_node_external.yaml
         wait: yes
-        wait_condition:
-          type: Complete
-          status: "True"
+        wait_sleep: 5
+        wait_timeout: 150
