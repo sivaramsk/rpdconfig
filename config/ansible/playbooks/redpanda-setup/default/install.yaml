@@ -25,4 +25,7 @@
         namespace: panda-chat
         state: present
         src: /tmp/one_node_external.yaml
-        
+        wait: yes
+        wait_condition:
+          type: Complete
+          status: "True"

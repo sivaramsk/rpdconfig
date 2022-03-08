@@ -43,5 +43,7 @@
     create_namespace: true
     chart_version: "v21.11.8"
     #chart_version: "{{ redpanda_version.json.tag_name }}"
-    wait: true
-
+    wait: yes
+    wait_condition:
+      type: Complete
+      status: "True"
