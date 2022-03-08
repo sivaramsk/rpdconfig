@@ -44,5 +44,3 @@
     chart_version: "v21.11.8"
     #chart_version: "{{ redpanda_version.json.tag_name }}"
     wait: yes
-    wait_sleep: 5
-    wait_timeout: 150
