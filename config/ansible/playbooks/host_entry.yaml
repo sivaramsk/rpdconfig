@@ -1,0 +1,15 @@
+- hosts: localhost
+  gather_facts: no
+  vars:
+    - ansible_python_interpreter: "/usr/bin/python3"
+
+  tasks:
+    
+    - name: Replace a localhost entry searching for a literal string to avoid escaping
+      become: true
+      lineinfile:
+        path: /etc/hosts
+        line: 127.0.0.1 0.local.rp
+        owner: root
+        group: root
+        mode: '0644'
