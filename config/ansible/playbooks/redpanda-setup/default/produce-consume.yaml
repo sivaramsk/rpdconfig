@@ -7,14 +7,14 @@
   tasks:
 
     - name: Create panda-chat topic with five partitions
-      ansible.builtin.shell: ${GOPATH}/bin/rpk topic create panda-chat -p 5 --brokers localhost:30001
+      ansible.builtin.shell: rpk topic create panda-chat -p 5 --brokers localhost:30001
     
     - name: Produce some data in panda-chat topic
       ansible.builtin.shell: |
         global env
         set timeout 20
 
-        spawn $env(GOPATH)/bin/rpk topic produce panda-chat --brokers localhost:30001
+        spawn rpk topic produce panda-chat --brokers localhost:30001
 
         expect "" 
         send "Pandas are fabulous\r"
@@ -34,7 +34,7 @@
         gobal env
         set timeout 20
 
-        spawn $env(GOPATH)/bin/rpk topic consume panda-chat --brokers localhost:30001
+        spawn rpk topic consume panda-chat --brokers localhost:30001
         expect ""
         send "\x03"
 
@@ -44,5 +44,5 @@
       delegate_to: localhost
 
     - name: List the topics 
-      ansible.builtin.shell: ${GOPATH}/bin/rpk topic list --brokers localhost:30001
+      ansible.builtin.shell: rpk topic list --brokers localhost:30001
 
