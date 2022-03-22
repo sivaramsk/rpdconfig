@@ -1,5 +1,5 @@
 - name: Remove cert-manager deployment using helm
-  community.kubernetes.helm:
+  kubernetes.core.helm:
     name: cert-manager
     release_namespace: cert-manager
     state: absent
