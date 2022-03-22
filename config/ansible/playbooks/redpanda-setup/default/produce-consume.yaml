@@ -7,10 +7,10 @@
   tasks:
 
     - name: Create panda-chat topic with five partitions
-      ansible.builtin.shell: rpk topic create panda-chat -p 5 --brokers localhost:30001
+      shell: rpk topic create panda-chat -p 5 --brokers localhost:30001
     
     - name: Produce some data in panda-chat topic
-      ansible.builtin.shell: |
+      shell: |
         global env
         set timeout 20
 
@@ -30,7 +30,7 @@
 
 
     - name: Consume the data produced in panda-chat topic
-      ansible.builtin.shell: |
+      shell: |
         gobal env
         set timeout 20
 
@@ -44,5 +44,5 @@
       delegate_to: localhost
 
     - name: List the topics 
-      ansible.builtin.shell: rpk topic list --brokers localhost:30001
+      shell: rpk topic list --brokers localhost:30001
 
